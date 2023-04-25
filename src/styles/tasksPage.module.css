@@ -1,0 +1,15 @@
+.tasksWrapper {
+  width: 30%;
+  height: 80vh;
+  background-color: #eeeeee !important;
+  border-radius: 15px !important;
+}
+
+.tasksHeader {
+  padding: 10px;
+  text-align: center;
+}
+
+.header {
+  background-color: #b8d4ee !important;
+}
