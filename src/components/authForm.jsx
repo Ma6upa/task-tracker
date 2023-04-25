@@ -34,6 +34,7 @@ const AuthForm = () => {
     users.some(e => {
       if (e.login === userData.login && e.password === userData.password) {
         localStorage.setItem('userKey', makeid())
+        window.location.pathname = '/tasks'
         return;
       } else {
         setNoUser(true)
