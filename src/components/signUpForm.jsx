@@ -85,7 +85,7 @@ const SignUpForm = () => {
             <Grid container>
               <Grid item>
                 <Link to={'/'}>
-                  Already have an account? Sing in
+                  Already have an account? Sign in
                 </Link>
               </Grid>
             </Grid>

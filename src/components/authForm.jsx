@@ -9,19 +9,42 @@ import {
   Typography,
   createTheme,
 } from "@mui/material"
-import { useDispatch, useSelector } from "react-redux";
+import { useState } from "react";
+import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 
 const AuthForm = () => {
-  const dispatch = useDispatch()
   const users = useSelector(state => state.usersReducer.users)
   const theme = createTheme();
-  console.log(users)
+  const [noUser, setNoUser] = useState(false);
+
+  function makeid() {
+    let result = '';
+    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    const charactersLength = characters.length;
+    let counter = 0;
+    while (counter < 64) {
+      result += characters.charAt(Math.floor(Math.random() * charactersLength));
+      counter += 1;
+    }
+    return result;
+  }
+
+  const checkUser = (userData) => {
+    users.some(e => {
+      if (e.login === userData.login && e.password === userData.password) {
+        localStorage.setItem('userKey', makeid())
+        return;
+      } else {
+        setNoUser(true)
+      }
+    })
+  }
 
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    console.log({
+    checkUser({
       login: data.get('login'),
       password: data.get('password'),
     })
@@ -76,6 +99,13 @@ const AuthForm = () => {
                 </Link>
               </Grid>
             </Grid>
+            {noUser && (
+              <Box>
+                <Typography component="h2" variant="h6">
+                  This user doesn't exist, please <Link to={'/signUp'}>Sign up</Link>
+                </Typography>
+              </Box>
+            )}
           </Box>
         </Box>
       </Container>
