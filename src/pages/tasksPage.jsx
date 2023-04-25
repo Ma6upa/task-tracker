@@ -30,6 +30,18 @@ const TasksPage = () => {
   const [tasksInProgress, setTasksInProgress] = useState(tasks.filter(task => task.taskState === "В работе"))
   const [tasksDone, setTasksDone] = useState(tasks.filter(task => task.taskState === "Выполнено"))
 
+  useEffect(() => {
+    setTasksInQueue(tasks.filter(task => task.taskState === "В очереди"))
+    setTasksInProgress(tasks.filter(task => task.taskState === "В работе"))
+    setTasksDone(tasks.filter(task => task.taskState === "Выполнено"))
+  }, [tasks])
+
+  useEffect(() => {
+    if (!localStorage.getItem('userKey')) {
+      window.location.pathname = '/error'
+    }
+  }, [])
+
   const addTask = (task) => {
     dispatch({ type: "ADD_TASK", payload: task })
   }
@@ -47,12 +59,6 @@ const TasksPage = () => {
     addTask(task)
     setOpenModal(false)
   }
-
-  useEffect(() => {
-    if (!localStorage.getItem('userKey')) {
-      window.location.pathname = '/error'
-    }
-  }, [])
 
   const handleClose = () => {
     setOpenModal(false)
