@@ -1,7 +1,7 @@
 const ErrorPage = () => {
-    return (
-      <div>ErrorPage is working</div>      
-    )
-  }
-  
-  export {ErrorPage}
+  return (
+    <div>ErrorPage is working</div>
+  )
+}
+
+export { ErrorPage }

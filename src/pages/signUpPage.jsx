@@ -6,4 +6,4 @@ const SignUpPage = () => {
   )
 }
 
-export {SignUpPage}
+export { SignUpPage }
