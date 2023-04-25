@@ -47,7 +47,6 @@ const AuthForm = () => {
               id="login"
               label="Login"
               name="login"
-              autoComplete="login"
               autoFocus
             />
             <TextField
@@ -58,7 +57,6 @@ const AuthForm = () => {
               label="Password"
               type="password"
               id="password"
-              autoComplete="current-password"
             />
             <Button
               type="submit"
@@ -70,8 +68,8 @@ const AuthForm = () => {
             </Button>
             <Grid container>
               <Grid item>
-                <Link to={'/error'}>
-                  {"Don't have an account? Sign Up"}
+                <Link to={'/signUp'}>
+                  Don't have an account? Sign Up
                 </Link>
               </Grid>
             </Grid>

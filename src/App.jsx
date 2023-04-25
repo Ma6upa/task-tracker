@@ -2,12 +2,14 @@ import { Route, Routes } from "react-router-dom";
 import { AuthPage } from "./pages/authPage";
 import { TasksPage } from "./pages/tasksPage";
 import { ErrorPage } from "./pages/errorPage";
+import { SignUpPage } from "./pages/signUpPage";
 
 function App() {
   return (
     <>
       <Routes>
         <Route path="/" element={<AuthPage />} />
+        <Route path="/signUp" element={<SignUpPage />} />
         <Route path="/tasks" element={<TasksPage />} />
         <Route path="/error" element={<ErrorPage />} />
       </Routes>
