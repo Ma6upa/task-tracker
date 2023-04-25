@@ -1,6 +1,8 @@
+import { AuthForm } from "../components/authForm"
+
 const AuthPage = () => {
   return (
-    <div>AuthPage is working</div>      
+    <AuthForm />   
   )
 }
 
