@@ -18,12 +18,17 @@ import { useEffect, useState } from "react"
 import styles from '../styles/tasksPage.module.css';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import { useDispatch, useSelector } from "react-redux";
+import { Task } from "../components/task";
 
 const TasksPage = () => {
   const theme = createTheme();
-  const [openModal, setOpenModal] = useState(false)
   const dispatch = useDispatch();
   const users = useSelector(state => state.usersReducer.users);
+  const tasks = useSelector(state => state.tasksReducer.tasks);
+  const [openModal, setOpenModal] = useState(false)
+  const [tasksInQueue, setTasksInQueue] = useState(tasks.filter(task => task.taskState === "В очереди"))
+  const [tasksInProgress, setTasksInProgress] = useState(tasks.filter(task => task.taskState === "В работе"))
+  const [tasksDone, setTasksDone] = useState(tasks.filter(task => task.taskState === "Выполнено"))
 
   const addTask = (task) => {
     dispatch({ type: "ADD_TASK", payload: task })
@@ -91,6 +96,11 @@ const TasksPage = () => {
                 В работе
               </Typography>
               <Divider />
+              <Box className={styles.tasksItems}>
+                {tasksInProgress.map(item => (
+                  <Task task={item} />
+                ))}
+              </Box>
             </Card>
             <Card variant="outlined" className={styles.tasksWrapper}>
               <Typography variant="h6" className={styles.tasksHeader}>
