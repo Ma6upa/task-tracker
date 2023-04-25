@@ -1,7 +1,16 @@
+import { useEffect } from "react"
+
 const TasksPage = () => {
-    return (
-      <div>TasksPage is working</div>      
-    )
-  }
-  
-  export {TasksPage}
+
+  useEffect(() => {
+    if (!localStorage.getItem('userKey')) {
+      window.location.pathname = '/error'
+    }
+  }, [])
+
+  return (
+    <div>TasksPage is working</div>
+  )
+}
+
+export { TasksPage }
