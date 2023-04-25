@@ -6,25 +6,30 @@ import {
   Container,
   CssBaseline,
   Divider,
-  IconButton,
+  Modal,
   ThemeProvider,
   Toolbar,
   Typography,
   createTheme,
 } from "@mui/material"
-import MenuIcon from '@mui/icons-material/Menu';
-import { useEffect } from "react"
+import { useEffect, useState } from "react"
 import styles from '../styles/tasksPage.module.css';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
+import { NewTask } from "../components/newTask";
 
 const TasksPage = () => {
   const theme = createTheme();
+  const [openModal, setOpenModal] = useState(false)
 
   useEffect(() => {
     if (!localStorage.getItem('userKey')) {
       window.location.pathname = '/error'
     }
   }, [])
+
+  const handleClose = () => {
+    setOpenModal(false)
+  }
 
   return (
     <>
@@ -33,6 +38,9 @@ const TasksPage = () => {
           <Button
             variant="contained"
             sx={{ mt: 3, mb: 2 }}
+            onClick={() => {
+              setOpenModal(true)
+            }}
           >
             <AddCircleOutlineIcon />  Новая задача
           </Button>
@@ -71,6 +79,19 @@ const TasksPage = () => {
           </Box>
         </Container>
       </ThemeProvider>
+
+      <Modal
+        open={openModal}
+        onClose={handleClose}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Container component="main" maxWidth="sm">
+          <Box className={styles.modal}>
+            <NewTask />
+          </Box>
+        </Container>
+      </Modal>
     </>
   )
 }
