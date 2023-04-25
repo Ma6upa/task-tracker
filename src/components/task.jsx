@@ -1,9 +1,10 @@
 import {
-  Box, 
-  Card, 
-  Divider, 
+  Box,
+  Card,
+  Divider,
   Typography,
 } from "@mui/material"
+import { PriorityCircle } from "./priorityCircle"
 
 const Task = (props) => {
   const task = props.task
@@ -15,13 +16,14 @@ const Task = (props) => {
       <Box sx={{
         marginLeft: '10%'
       }}>
-        <Typography variant="h6" >{task.name}</Typography>
+        <PriorityCircle priority={task.priority} />
+        <Typography variant="h6" style={{ display: "inline-block", marginLeft: 10 }}>{task.name}</Typography>
       </Box>
       <Divider />
       <Box sx={{
         marginLeft: '10%'
       }}>
-        <Typography variant="h6" >{task.executor}</Typography>
+        <Typography variant="h6" style={{ marginLeft: 5 }}>{task.executor}</Typography>
       </Box>
     </Card>
   )

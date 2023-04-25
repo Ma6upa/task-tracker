@@ -90,6 +90,11 @@ const TasksPage = () => {
                 В очереди
               </Typography>
               <Divider />
+              <Box className={styles.tasksItems}>
+                {tasksInQueue.map(item => (
+                  <Task task={item} />
+                ))}
+              </Box>
             </Card>
             <Card variant="outlined" className={styles.tasksWrapper}>
               <Typography variant="h6" className={styles.tasksHeader}>
@@ -107,6 +112,11 @@ const TasksPage = () => {
                 Выполнено
               </Typography>
               <Divider />
+              <Box className={styles.tasksItems}>
+                {tasksDone.map(item => (
+                  <Task task={item} />
+                ))}
+              </Box>
             </Card>
           </Box>
         </Container>
