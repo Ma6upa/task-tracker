@@ -9,11 +9,14 @@ import {
   Typography,
   createTheme,
 } from "@mui/material"
+import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 
 const AuthForm = () => {
-
+  const dispatch = useDispatch()
+  const users = useSelector(state => state.usersReducer.users)
   const theme = createTheme();
+  console.log(users)
 
   const handleSubmit = (event) => {
     event.preventDefault();

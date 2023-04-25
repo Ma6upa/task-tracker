@@ -4,6 +4,13 @@ import { TasksPage } from "./pages/tasksPage";
 import { ErrorPage } from "./pages/errorPage";
 import { SignUpPage } from "./pages/signUpPage";
 
+if (!localStorage.getItem('users')) {
+  localStorage.setItem('users', JSON.stringify([{
+    login: 'admin',
+    password: 'admin'
+  }]))
+}
+
 function App() {
   return (
     <>

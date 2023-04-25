@@ -1,7 +1,7 @@
 const ADD_USER = 'ADD_USER'
 
 const initialState = {
-  users: localStorage.getItem('users') || []
+  users: JSON.parse(localStorage.getItem('users')) || []
 }
 
 export const usersReducer = (state = initialState, action) => {
