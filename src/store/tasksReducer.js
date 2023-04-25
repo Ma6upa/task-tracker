@@ -1,8 +1,8 @@
-const ADD_TASK = 'ADD TASK'
+const ADD_TASK = 'ADD_TASK'
 const REMOVE_TASK = 'REMOVE_TASK'
 
 const initialState = {
-  tasks: localStorage.getItem('tasks') || []
+  tasks: JSON.parse(localStorage.getItem('tasks')) || []
 }
 
 export const tasksReducer = (state = initialState, action) => {

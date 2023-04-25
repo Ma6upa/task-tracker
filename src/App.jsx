@@ -10,6 +10,7 @@ if (!localStorage.getItem('users')) {
     password: 'admin'
   }]))
 }
+
 if (!localStorage.getItem('tasks')) {
   localStorage.setItem('tasks', JSON.stringify([]))
 }

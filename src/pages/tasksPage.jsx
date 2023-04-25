@@ -6,7 +6,9 @@ import {
   Container,
   CssBaseline,
   Divider,
+  MenuItem,
   Modal,
+  TextField,
   ThemeProvider,
   Toolbar,
   Typography,
@@ -15,11 +17,31 @@ import {
 import { useEffect, useState } from "react"
 import styles from '../styles/tasksPage.module.css';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
-import { NewTask } from "../components/newTask";
+import { useDispatch, useSelector } from "react-redux";
 
 const TasksPage = () => {
   const theme = createTheme();
   const [openModal, setOpenModal] = useState(false)
+  const dispatch = useDispatch();
+  const users = useSelector(state => state.usersReducer.users);
+
+  const addTask = (task) => {
+    dispatch({ type: "ADD_TASK", payload: task })
+  }
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    const data = new FormData(event.currentTarget);
+    const task = {
+      name: data.get('name'),
+      executor: data.get('executor'),
+      description: data.get('description'),
+      taskState: data.get('taskState'),
+      priority: data.get('priority')
+    }
+    addTask(task)
+    setOpenModal(false)
+  }
 
   useEffect(() => {
     if (!localStorage.getItem('userKey')) {
@@ -88,7 +110,89 @@ const TasksPage = () => {
       >
         <Container component="main" maxWidth="sm">
           <Box className={styles.modal}>
-            <NewTask />
+            <Box
+              sx={{
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+              }}
+            >
+              <Typography variant="h6" className={styles.tasksHeader}>
+                Новая задача
+              </Typography>
+              <Divider />
+              <Box
+                sx={{
+                  width: '90%'
+                }}
+                component="form"
+                onSubmit={handleSubmit}
+                noValidate
+              >
+                <TextField
+                  margin="normal"
+                  fullWidth
+                  id="name"
+                  label="Название"
+                  name="name"
+                  autoFocus
+                />
+                <TextField
+                  select
+                  margin="normal"
+                  fullWidth
+                  id="executor"
+                  label="Исполнитель"
+                  name="executor"
+                >
+                  {users.map(item => (
+                    <MenuItem key={item.login} value={item.login}>
+                      {item.login}
+                    </MenuItem>
+                  ))}
+                </TextField>
+                <TextField
+                  multiline
+                  rows={5}
+                  margin="normal"
+                  fullWidth
+                  id="description"
+                  label="Описание задачи"
+                  name="description"
+                />
+                <TextField
+                  select
+                  margin="normal"
+                  fullWidth
+                  id="taskState"
+                  label="Состояние"
+                  name="taskState"
+                >
+                  <MenuItem value={'В очереди'}>В очереди</MenuItem>
+                  <MenuItem value={'В работе'}>В работе</MenuItem>
+                  <MenuItem value={'Выполнено'}>Выполнено</MenuItem>
+                </TextField>
+                <TextField
+                  select
+                  margin="normal"
+                  fullWidth
+                  id="priority"
+                  label="Приоритет"
+                  name="priority"
+                >
+                  <MenuItem value={'1'}>Обычный</MenuItem>
+                  <MenuItem value={'2'}>Важно</MenuItem>
+                  <MenuItem value={'3'}>Срочно</MenuItem>
+                </TextField>
+                <Button
+                  type="submit"
+                  variant="contained"
+                  sx={{ mt: 3, mb: 2, float: 'right' }}
+                >
+                  Сохранить
+                </Button>
+              </Box>
+            </Box>
           </Box>
         </Container>
       </Modal>
