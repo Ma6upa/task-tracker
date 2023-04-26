@@ -15,14 +15,14 @@ const Task = (props) => {
       cursor: 'pointer'
     }}>
       <Box sx={{
-        marginLeft: '10%'
+        marginLeft: 5
       }}>
         <PriorityCircle priority={task.priority} />
         <Typography variant="h6" style={{ display: "inline-block", marginLeft: 10 }}>{task.name}</Typography>
       </Box>
       <Divider />
       <Box sx={{
-        marginLeft: '10%'
+        marginLeft: 5
       }}>
         <Typography variant="h6" style={{ marginLeft: 5 }}>{task.executor}</Typography>
       </Box>
