@@ -111,15 +111,15 @@ const TasksPage = () => {
   }
 
   const handleMenuItem = (tasksState) => {
-    if(tasksState === 'inQueue') {
+    if (tasksState === 'inQueue') {
       setTasksMobile(tasksInQueue)
       setTasksMobileName("В очереди")
     }
-    if(tasksState === 'inProgress') {
+    if (tasksState === 'inProgress') {
       setTasksMobile(tasksInProgress)
       setTasksMobileName("В работе")
     }
-    if(tasksState === 'done') {
+    if (tasksState === 'done') {
       setTasksMobile(tasksDone)
       setTasksMobileName("Выполнено")
     }
@@ -379,6 +379,15 @@ const TasksPage = () => {
                   sx={{ mt: 3, mb: 2, float: 'right' }}
                 >
                   Сохранить
+                </Button>
+                <Button
+                  variant="outlined"
+                  sx={{ mt: 3, mb: 2, float: 'right', mr: 2 }}
+                  onClick={() => {
+                    setOpenModalNew(false)
+                  }}
+                >
+                  Отмена
                 </Button>
               </Box>
             </Box>
