@@ -80,7 +80,7 @@ const TasksPage = () => {
       executor: tasks[taskId].executor,
       description: tasks[taskId].description,
       taskState: data.get('taskState'),
-      priority: data.get('priority') 
+      priority: data.get('priority')
     }
     editTask(task)
     setOpenModalEdit(false)
