@@ -53,7 +53,7 @@ const SignUpForm = () => {
           }}
         >
           <Typography component="h1" variant="h5">
-            Sign up
+            Регистрация
           </Typography>
           <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
             <TextField
@@ -61,7 +61,7 @@ const SignUpForm = () => {
               required
               fullWidth
               id="login"
-              label="Login"
+              label="Логин"
               name="login"
               autoFocus
             />
@@ -70,7 +70,7 @@ const SignUpForm = () => {
               required
               fullWidth
               name="password"
-              label="Password"
+              label="Пароль"
               type="password"
               id="password"
             />
@@ -80,19 +80,19 @@ const SignUpForm = () => {
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
             >
-              Sign Up
+              Зарегистрироваться
             </Button>
             <Grid container>
               <Grid item>
                 <Link to={'/'}>
-                  Already have an account? Sign in
+                  У вас уже есть аккаунт? Авторизуйтесь
                 </Link>
               </Grid>
             </Grid>
             {alreadySingedUp && (
               <Box>
                 <Typography component="h2" variant="h6">
-                  This user already exists, please <Link to={'/'}>Sign in</Link>
+                  Данный пользователь уже существует, <Link to={'/'}>авторизуйтесь</Link>
                 </Typography>
               </Box>
             )}
