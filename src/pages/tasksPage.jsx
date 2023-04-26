@@ -149,8 +149,20 @@ const TasksPage = () => {
               </Typography>
               <Divider />
               <Box className={styles.tasksItems}>
-                {tasksInProgress.map((item) => (
-                  <Task task={item} key={item.id} />
+                {tasksInProgress.map((item, index) => (
+                  <div
+                    style={{
+                      width: '100%',
+                      display: 'flex',
+                      justifyContent: 'center'
+                    }}
+                    onClick={() => {
+                      setTaskId(index)
+                      setOpenModalEdit(true)
+                    }}
+                  >
+                    <Task task={item} key={item.id} />
+                  </div>
                 ))}
               </Box>
             </Card>
@@ -160,8 +172,20 @@ const TasksPage = () => {
               </Typography>
               <Divider />
               <Box className={styles.tasksItems}>
-                {tasksDone.map((item) => (
-                  <Task task={item} key={item.id} />
+                {tasksDone.map((item, index) => (
+                  <div
+                    style={{
+                      width: '100%',
+                      display: 'flex',
+                      justifyContent: 'center'
+                    }}
+                    onClick={() => {
+                      setTaskId(index)
+                      setOpenModalEdit(true)
+                    }}
+                  >
+                    <Task task={item} key={item.id} />
+                  </div>
                 ))}
               </Box>
             </Card>
