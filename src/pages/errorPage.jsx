@@ -1,6 +1,8 @@
+import { ErrorComp } from "../components/errorComp"
+
 const ErrorPage = () => {
   return (
-    <div>ErrorPage is working</div>
+    <ErrorComp />
   )
 }
 
