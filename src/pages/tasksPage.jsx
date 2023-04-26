@@ -6,6 +6,8 @@ import {
   Container,
   CssBaseline,
   Divider,
+  IconButton,
+  Menu,
   MenuItem,
   Modal,
   TextField,
@@ -17,6 +19,7 @@ import {
 import { useEffect, useState } from "react"
 import styles from '../styles/tasksPage.module.css';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
+import MenuIcon from '@mui/icons-material/Menu';
 import { useDispatch, useSelector } from "react-redux";
 import { Task } from "../components/task";
 
@@ -30,7 +33,11 @@ const TasksPage = () => {
   const [tasksInQueue, setTasksInQueue] = useState(tasks.filter(task => task.taskState === "В очереди"))
   const [tasksInProgress, setTasksInProgress] = useState(tasks.filter(task => task.taskState === "В работе"))
   const [tasksDone, setTasksDone] = useState(tasks.filter(task => task.taskState === "Выполнено"))
+  const [tasksMobile, setTasksMobile] = useState(tasksInQueue)
+  const [tasksMobileName, setTasksMobileName] = useState("В очереди")
   const [taskId, setTaskId] = useState(0)
+  const [displayWidth, setDisplayWidth] = useState(1920)
+  const [openMenu, setOpenMenu] = useState(null);
 
   useEffect(() => {
     setTasksInQueue(tasks.filter(task => task.taskState === "В очереди"))
@@ -42,6 +49,7 @@ const TasksPage = () => {
     if (!localStorage.getItem('userKey')) {
       window.location.pathname = '/error'
     }
+    setDisplayWidth(window.innerWidth)
   }, [])
 
   const addTask = (task) => {
@@ -55,6 +63,14 @@ const TasksPage = () => {
   const editTask = (task) => {
     dispatch({ type: "EDIT_TASK", payload: task })
   }
+
+  const handleMenu = (event) => {
+    setOpenMenu(event.currentTarget);
+  };
+
+  const handleCloseMenu = () => {
+    setOpenMenu(null);
+  };
 
   const handleSubmitNew = (event) => {
     event.preventDefault();
@@ -94,6 +110,22 @@ const TasksPage = () => {
     setOpenModalEdit(false)
   }
 
+  const handleMenuItem = (tasksState) => {
+    if(tasksState === 'inQueue') {
+      setTasksMobile(tasksInQueue)
+      setTasksMobileName("В очереди")
+    }
+    if(tasksState === 'inProgress') {
+      setTasksMobile(tasksInProgress)
+      setTasksMobileName("В работе")
+    }
+    if(tasksState === 'done') {
+      setTasksMobile(tasksDone)
+      setTasksMobileName("Выполнено")
+    }
+    handleCloseMenu()
+  }
+
   return (
     <>
       <AppBar position="static" className={styles.header}>
@@ -107,90 +139,155 @@ const TasksPage = () => {
           >
             <AddCircleOutlineIcon />  Новая задача
           </Button>
+          <div style={{ flexGrow: 1 }}></div>
+          {displayWidth < 768 && (
+            <>
+              <IconButton
+                aria-label="menu"
+                aria-controls="menu-appbar"
+                onClick={handleMenu}
+              >
+                <MenuIcon style={{ color: "#1976d2" }} />
+              </IconButton>
+              <Menu
+                id="menu-appbar"
+                anchorEl={openMenu}
+                anchorOrigin={{
+                  vertical: 'top',
+                  horizontal: 'right',
+                }}
+                keepMounted
+                transformOrigin={{
+                  vertical: 'top',
+                  horizontal: 'right',
+                }}
+                open={Boolean(openMenu)}
+                onClose={handleCloseMenu}
+              >
+                <MenuItem onClick={(e) => handleMenuItem('inQueue')}>В очереди</MenuItem>
+                <MenuItem onClick={(e) => handleMenuItem('inProgress')}>В работе</MenuItem>
+                <MenuItem onClick={(e) => handleMenuItem('done')}>Выполнено</MenuItem>
+              </Menu>
+            </>
+          )}
         </Toolbar>
       </AppBar>
       <ThemeProvider theme={theme}>
         <Container component="main" maxWidth="lg">
           <CssBaseline />
-          <Box
-            sx={{
-              marginTop: 8,
-              display: 'flex',
-              flexDirection: 'row',
-              alignItems: 'center',
-              justifyContent: 'space-between',
-            }}
-          >
-            <Card variant="outlined" className={styles.tasksWrapper}>
-              <Typography variant="h6" className={styles.tasksHeader}>
-                В очереди
-              </Typography>
-              <Divider />
-              <Box className={styles.tasksItems}>
-                {tasksInQueue.map((item, index) => (
-                  <div
-                    style={{
-                      width: '100%',
-                      display: 'flex',
-                      justifyContent: 'center'
-                    }}
-                    onClick={() => {
-                      setTaskId(index)
-                      setOpenModalEdit(true)
-                    }}
-                  >
-                    <Task task={item} key={item.id} />
-                  </div>
-                ))}
-              </Box>
-            </Card>
-            <Card variant="outlined" className={styles.tasksWrapper}>
-              <Typography variant="h6" className={styles.tasksHeader}>
-                В работе
-              </Typography>
-              <Divider />
-              <Box className={styles.tasksItems}>
-                {tasksInProgress.map((item, index) => (
-                  <div
-                    style={{
-                      width: '100%',
-                      display: 'flex',
-                      justifyContent: 'center'
-                    }}
-                    onClick={() => {
-                      setTaskId(index)
-                      setOpenModalEdit(true)
-                    }}
-                  >
-                    <Task task={item} key={item.id} />
-                  </div>
-                ))}
-              </Box>
-            </Card>
-            <Card variant="outlined" className={styles.tasksWrapper}>
-              <Typography variant="h6" className={styles.tasksHeader}>
-                Выполнено
-              </Typography>
-              <Divider />
-              <Box className={styles.tasksItems}>
-                {tasksDone.map((item, index) => (
-                  <div
-                    style={{
-                      width: '100%',
-                      display: 'flex',
-                      justifyContent: 'center'
-                    }}
-                    onClick={() => {
-                      setTaskId(index)
-                      setOpenModalEdit(true)
-                    }}
-                  >
-                    <Task task={item} key={item.id} />
-                  </div>
-                ))}
-              </Box>
-            </Card>
-          </Box>
+          {displayWidth > 768 ?
+            <Box
+              sx={{
+                marginTop: 8,
+                display: 'flex',
+                flexDirection: 'row',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+              }}
+            >
+              <Card variant="outlined" className={styles.tasksWrapper}>
+                <Typography variant="h6" className={styles.tasksHeader}>
+                  В очереди
+                </Typography>
+                <Divider />
+                <Box className={styles.tasksItems}>
+                  {tasksInQueue.map((item, index) => (
+                    <div
+                      style={{
+                        width: '100%',
+                        display: 'flex',
+                        justifyContent: 'center'
+                      }}
+                      onClick={() => {
+                        setTaskId(index)
+                        setOpenModalEdit(true)
+                      }}
+                    >
+                      <Task task={item} key={item.id} />
+                    </div>
+                  ))}
+                </Box>
+              </Card>
+              <Card variant="outlined" className={styles.tasksWrapper}>
+                <Typography variant="h6" className={styles.tasksHeader}>
+                  В работе
+                </Typography>
+                <Divider />
+                <Box className={styles.tasksItems}>
+                  {tasksInProgress.map((item, index) => (
+                    <div
+                      style={{
+                        width: '100%',
+                        display: 'flex',
+                        justifyContent: 'center'
+                      }}
+                      onClick={() => {
+                        setTaskId(index)
+                        setOpenModalEdit(true)
+                      }}
+                    >
+                      <Task task={item} key={item.id} />
+                    </div>
+                  ))}
+                </Box>
+              </Card>
+              <Card variant="outlined" className={styles.tasksWrapper}>
+                <Typography variant="h6" className={styles.tasksHeader}>
+                  Выполнено
+                </Typography>
+                <Divider />
+                <Box className={styles.tasksItems}>
+                  {tasksDone.map((item, index) => (
+                    <div
+                      style={{
+                        width: '100%',
+                        display: 'flex',
+                        justifyContent: 'center'
+                      }}
+                      onClick={() => {
+                        setTaskId(index)
+                        setOpenModalEdit(true)
+                      }}
+                    >
+                      <Task task={item} key={item.id} />
+                    </div>
+                  ))}
+                </Box>
+              </Card>
+            </Box>
+            :
+            <Box
+              sx={{
+                marginTop: 8,
+                display: 'flex',
+                alignItems: 'center',
+              }}
+            >
+              <Card variant="outlined" className={styles.tasksWrapper} style={{ width: '100%' }}>
+                <Typography variant="h6" className={styles.tasksHeader}>
+                  {tasksMobileName}
+                </Typography>
+                <Divider />
+                <Box className={styles.tasksItems}>
+                  {tasksMobile.map((item, index) => (
+                    <div
+                      style={{
+                        width: '100%',
+                        display: 'flex',
+                        justifyContent: 'center'
+                      }}
+                      onClick={() => {
+                        setTaskId(index)
+                        setOpenModalEdit(true)
+                      }}
+                    >
+                      <Task task={item} key={item.id} />
+                    </div>
+                  ))}
+                </Box>
+              </Card>
+            </Box>
+          }
         </Container>
       </ThemeProvider>
 
