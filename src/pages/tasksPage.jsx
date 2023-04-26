@@ -25,10 +25,12 @@ const TasksPage = () => {
   const dispatch = useDispatch();
   const users = useSelector(state => state.usersReducer.users);
   const tasks = useSelector(state => state.tasksReducer.tasks);
-  const [openModal, setOpenModal] = useState(false)
+  const [openModalNew, setOpenModalNew] = useState(false)
+  const [openModalEdit, setOpenModalEdit] = useState(false)
   const [tasksInQueue, setTasksInQueue] = useState(tasks.filter(task => task.taskState === "В очереди"))
   const [tasksInProgress, setTasksInProgress] = useState(tasks.filter(task => task.taskState === "В работе"))
   const [tasksDone, setTasksDone] = useState(tasks.filter(task => task.taskState === "Выполнено"))
+  const [taskId, setTaskId] = useState(0)
 
   useEffect(() => {
     setTasksInQueue(tasks.filter(task => task.taskState === "В очереди"))
@@ -46,7 +48,22 @@ const TasksPage = () => {
     dispatch({ type: "ADD_TASK", payload: task })
   }
 
-  const handleSubmit = (event) => {
+  const handleSubmitNew = (event) => {
+    event.preventDefault();
+    const data = new FormData(event.currentTarget);
+    const task = {
+      id: Date.now(),
+      name: data.get('name'),
+      executor: data.get('executor'),
+      description: data.get('description'),
+      taskState: data.get('taskState'),
+      priority: data.get('priority')
+    }
+    addTask(task)
+    setOpenModalNew(false)
+  }
+
+  const handleSubmitEdit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
     const task = {
@@ -57,11 +74,11 @@ const TasksPage = () => {
       priority: data.get('priority')
     }
     addTask(task)
-    setOpenModal(false)
+    setOpenModalNew(false)
   }
 
   const handleClose = () => {
-    setOpenModal(false)
+    setOpenModalNew(false)
   }
 
   return (
@@ -72,7 +89,7 @@ const TasksPage = () => {
             variant="contained"
             sx={{ mt: 3, mb: 2 }}
             onClick={() => {
-              setOpenModal(true)
+              setOpenModalNew(true)
             }}
           >
             <AddCircleOutlineIcon />  Новая задача
@@ -97,8 +114,8 @@ const TasksPage = () => {
               </Typography>
               <Divider />
               <Box className={styles.tasksItems}>
-                {tasksInQueue.map(item => (
-                  <Task task={item} />
+                {tasksInQueue.map((item) => (
+                  <Task task={item} key={item.id} />
                 ))}
               </Box>
             </Card>
@@ -108,8 +125,8 @@ const TasksPage = () => {
               </Typography>
               <Divider />
               <Box className={styles.tasksItems}>
-                {tasksInProgress.map(item => (
-                  <Task task={item} />
+                {tasksInProgress.map((item) => (
+                  <Task task={item} key={item.id} />
                 ))}
               </Box>
             </Card>
@@ -119,8 +136,8 @@ const TasksPage = () => {
               </Typography>
               <Divider />
               <Box className={styles.tasksItems}>
-                {tasksDone.map(item => (
-                  <Task task={item} />
+                {tasksDone.map((item) => (
+                  <Task task={item} key={item.id} />
                 ))}
               </Box>
             </Card>
@@ -129,7 +146,7 @@ const TasksPage = () => {
       </ThemeProvider>
 
       <Modal
-        open={openModal}
+        open={openModalNew}
         onClose={handleClose}
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
@@ -152,7 +169,101 @@ const TasksPage = () => {
                   width: '90%'
                 }}
                 component="form"
-                onSubmit={handleSubmit}
+                onSubmit={handleSubmitNew}
+                noValidate
+              >
+                <TextField
+                  margin="normal"
+                  fullWidth
+                  id="name"
+                  label="Название"
+                  name="name"
+                  autoFocus
+                />
+                <TextField
+                  select
+                  margin="normal"
+                  fullWidth
+                  id="executor"
+                  label="Исполнитель"
+                  name="executor"
+                >
+                  {users.map(item => (
+                    <MenuItem key={item.login} value={item.login}>
+                      {item.login}
+                    </MenuItem>
+                  ))}
+                </TextField>
+                <TextField
+                  multiline
+                  rows={5}
+                  margin="normal"
+                  fullWidth
+                  id="description"
+                  label="Описание задачи"
+                  name="description"
+                />
+                <TextField
+                  select
+                  margin="normal"
+                  fullWidth
+                  id="taskState"
+                  label="Состояние"
+                  name="taskState"
+                >
+                  <MenuItem value={'В очереди'}>В очереди</MenuItem>
+                  <MenuItem value={'В работе'}>В работе</MenuItem>
+                  <MenuItem value={'Выполнено'}>Выполнено</MenuItem>
+                </TextField>
+                <TextField
+                  select
+                  margin="normal"
+                  fullWidth
+                  id="priority"
+                  label="Приоритет"
+                  name="priority"
+                >
+                  <MenuItem value={'1'}>Обычный</MenuItem>
+                  <MenuItem value={'2'}>Важно</MenuItem>
+                  <MenuItem value={'3'}>Срочно</MenuItem>
+                </TextField>
+                <Button
+                  type="submit"
+                  variant="contained"
+                  sx={{ mt: 3, mb: 2, float: 'right' }}
+                >
+                  Сохранить
+                </Button>
+              </Box>
+            </Box>
+          </Box>
+        </Container>
+      </Modal>
+      <Modal
+        open={openModalEdit}
+        onClose={handleClose}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Container component="main" maxWidth="sm">
+          <Box className={styles.modal}>
+            <Box
+              sx={{
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+              }}
+            >
+              <Typography variant="h6" className={styles.tasksHeader}>
+                Новая задача
+              </Typography>
+              <Divider />
+              <Box
+                sx={{
+                  width: '90%'
+                }}
+                component="form"
+                onSubmit={handleSubmitEdit}
                 noValidate
               >
                 <TextField

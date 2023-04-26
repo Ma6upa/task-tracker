@@ -34,6 +34,7 @@ const SignUpForm = () => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
     addUser({
+      id: Date.now(),
       login: data.get('login'),
       password: data.get('password'),
     })

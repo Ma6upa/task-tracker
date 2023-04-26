@@ -6,6 +6,7 @@ import { SignUpPage } from "./pages/signUpPage";
 
 if (!localStorage.getItem('users')) {
   localStorage.setItem('users', JSON.stringify([{
+    id: 1,
     login: 'admin',
     password: 'admin'
   }]))
