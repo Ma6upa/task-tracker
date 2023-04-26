@@ -75,14 +75,15 @@ const TasksPage = () => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
     const task = {
-      name: data.get('name'),
-      executor: data.get('executor'),
-      description: data.get('description'),
+      id: tasks[taskId].id,
+      name: tasks[taskId].name,
+      executor: tasks[taskId].executor,
+      description: tasks[taskId].description,
       taskState: data.get('taskState'),
-      priority: data.get('priority')
+      priority: data.get('priority') 
     }
-    addTask(task)
-    setOpenModalNew(false)
+    editTask(task)
+    setOpenModalEdit(false)
   }
 
   const handleClose = () => {
@@ -316,32 +317,13 @@ const TasksPage = () => {
                   noValidate
                 >
                   <TextField
-                    id="id"
-                    name="id"
-                    defaultValue={tasks[taskId].id}
-                    disabled
-                    style={{
-                      display: 'none'
-                    }}
-                  />
-                  <TextField
-                    id="name"
-                    label="Название"
-                    name="name"
-                    defaultValue={tasks[taskId].name}
-                    disabled
-                    style={{
-                      display: 'none'
-                    }}
-                  />
-                  <TextField
                     select
                     margin="normal"
                     fullWidth
                     id="executor"
                     label="Исполнитель"
                     name="executor"
-                    defaultValue={tasks[taskId].executor}
+                    value={tasks[taskId].executor}
                     disabled
                   >
                     {users.map(item => (
@@ -358,7 +340,7 @@ const TasksPage = () => {
                     id="description"
                     label="Описание задачи"
                     name="description"
-                    defaultValue={tasks[taskId].description}
+                    value={tasks[taskId].description}
                     disabled
                   />
                   <TextField
