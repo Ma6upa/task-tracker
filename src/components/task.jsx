@@ -12,6 +12,7 @@ const Task = (props) => {
     <Card style={{
       marginTop: 15,
       width: '80%',
+      cursor: 'pointer'
     }}>
       <Box sx={{
         marginLeft: '10%'

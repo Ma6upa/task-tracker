@@ -48,6 +48,14 @@ const TasksPage = () => {
     dispatch({ type: "ADD_TASK", payload: task })
   }
 
+  const removeTask = (task) => {
+    dispatch({ type: "REMOVE_TASK", payload: task })
+  }
+
+  const editTask = (task) => {
+    dispatch({ type: "EDIT_TASK", payload: task })
+  }
+
   const handleSubmitNew = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
@@ -79,6 +87,10 @@ const TasksPage = () => {
 
   const handleClose = () => {
     setOpenModalNew(false)
+  }
+
+  const handleCloseEdit = () => {
+    setOpenModalEdit(false)
   }
 
   return (
@@ -114,8 +126,20 @@ const TasksPage = () => {
               </Typography>
               <Divider />
               <Box className={styles.tasksItems}>
-                {tasksInQueue.map((item) => (
-                  <Task task={item} key={item.id} />
+                {tasksInQueue.map((item, index) => (
+                  <div
+                    style={{
+                      width: '100%',
+                      display: 'flex',
+                      justifyContent: 'center'
+                    }}
+                    onClick={() => {
+                      setTaskId(index)
+                      setOpenModalEdit(true)
+                    }}
+                  >
+                    <Task task={item} key={item.id} />
+                  </div>
                 ))}
               </Box>
             </Card>
@@ -189,7 +213,7 @@ const TasksPage = () => {
                   name="executor"
                 >
                   {users.map(item => (
-                    <MenuItem key={item.login} value={item.login}>
+                    <MenuItem key={item.id} value={item.login}>
                       {item.login}
                     </MenuItem>
                   ))}
@@ -211,9 +235,9 @@ const TasksPage = () => {
                   label="Состояние"
                   name="taskState"
                 >
-                  <MenuItem value={'В очереди'}>В очереди</MenuItem>
-                  <MenuItem value={'В работе'}>В работе</MenuItem>
-                  <MenuItem value={'Выполнено'}>Выполнено</MenuItem>
+                  <MenuItem value={'В очереди'} key={'В очереди'}>В очереди</MenuItem>
+                  <MenuItem value={'В работе'} key={'В работе'}> В работе</MenuItem>
+                  <MenuItem value={'Выполнено'} key={'Выполнено'}>Выполнено</MenuItem>
                 </TextField>
                 <TextField
                   select
@@ -223,9 +247,9 @@ const TasksPage = () => {
                   label="Приоритет"
                   name="priority"
                 >
-                  <MenuItem value={'1'}>Обычный</MenuItem>
-                  <MenuItem value={'2'}>Важно</MenuItem>
-                  <MenuItem value={'3'}>Срочно</MenuItem>
+                  <MenuItem value={'1'} key={1}>Обычный</MenuItem>
+                  <MenuItem value={'2'} key={2}>Важно</MenuItem>
+                  <MenuItem value={'3'} kay={3}>Срочно</MenuItem>
                 </TextField>
                 <Button
                   type="submit"
@@ -239,100 +263,131 @@ const TasksPage = () => {
           </Box>
         </Container>
       </Modal>
-      <Modal
-        open={openModalEdit}
-        onClose={handleClose}
-        aria-labelledby="modal-modal-title"
-        aria-describedby="modal-modal-description"
-      >
-        <Container component="main" maxWidth="sm">
-          <Box className={styles.modal}>
-            <Box
-              sx={{
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'center',
-              }}
-            >
-              <Typography variant="h6" className={styles.tasksHeader}>
-                Новая задача
-              </Typography>
-              <Divider />
+      {tasks[taskId] && (
+        <Modal
+          open={openModalEdit}
+          onClose={handleCloseEdit}
+          aria-labelledby="modal-modal-title"
+          aria-describedby="modal-modal-description"
+        >
+          <Container component="main" maxWidth="sm">
+            <Box className={styles.modal}>
               <Box
                 sx={{
-                  width: '90%'
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'center',
                 }}
-                component="form"
-                onSubmit={handleSubmitEdit}
-                noValidate
               >
-                <TextField
-                  margin="normal"
-                  fullWidth
-                  id="name"
-                  label="Название"
-                  name="name"
-                  autoFocus
-                />
-                <TextField
-                  select
-                  margin="normal"
-                  fullWidth
-                  id="executor"
-                  label="Исполнитель"
-                  name="executor"
+                <Typography variant="h6" className={styles.tasksHeader}>
+                  {tasks[taskId].name}
+                </Typography>
+                <Divider />
+                <Box
+                  sx={{
+                    width: '90%'
+                  }}
+                  component="form"
+                  onSubmit={handleSubmitEdit}
+                  noValidate
                 >
-                  {users.map(item => (
-                    <MenuItem key={item.login} value={item.login}>
-                      {item.login}
-                    </MenuItem>
-                  ))}
-                </TextField>
-                <TextField
-                  multiline
-                  rows={5}
-                  margin="normal"
-                  fullWidth
-                  id="description"
-                  label="Описание задачи"
-                  name="description"
-                />
-                <TextField
-                  select
-                  margin="normal"
-                  fullWidth
-                  id="taskState"
-                  label="Состояние"
-                  name="taskState"
-                >
-                  <MenuItem value={'В очереди'}>В очереди</MenuItem>
-                  <MenuItem value={'В работе'}>В работе</MenuItem>
-                  <MenuItem value={'Выполнено'}>Выполнено</MenuItem>
-                </TextField>
-                <TextField
-                  select
-                  margin="normal"
-                  fullWidth
-                  id="priority"
-                  label="Приоритет"
-                  name="priority"
-                >
-                  <MenuItem value={'1'}>Обычный</MenuItem>
-                  <MenuItem value={'2'}>Важно</MenuItem>
-                  <MenuItem value={'3'}>Срочно</MenuItem>
-                </TextField>
-                <Button
-                  type="submit"
-                  variant="contained"
-                  sx={{ mt: 3, mb: 2, float: 'right' }}
-                >
-                  Сохранить
-                </Button>
+                  <TextField
+                    id="id"
+                    name="id"
+                    defaultValue={tasks[taskId].id}
+                    disabled
+                    style={{
+                      display: 'none'
+                    }}
+                  />
+                  <TextField
+                    id="name"
+                    label="Название"
+                    name="name"
+                    defaultValue={tasks[taskId].name}
+                    disabled
+                    style={{
+                      display: 'none'
+                    }}
+                  />
+                  <TextField
+                    select
+                    margin="normal"
+                    fullWidth
+                    id="executor"
+                    label="Исполнитель"
+                    name="executor"
+                    defaultValue={tasks[taskId].executor}
+                    disabled
+                  >
+                    {users.map(item => (
+                      <MenuItem key={item.id} value={item.login}>
+                        {item.login}
+                      </MenuItem>
+                    ))}
+                  </TextField>
+                  <TextField
+                    multiline
+                    rows={5}
+                    margin="normal"
+                    fullWidth
+                    id="description"
+                    label="Описание задачи"
+                    name="description"
+                    defaultValue={tasks[taskId].description}
+                    disabled
+                  />
+                  <TextField
+                    select
+                    margin="normal"
+                    fullWidth
+                    id="taskState"
+                    label="Состояние"
+                    name="taskState"
+                    defaultValue={tasks[taskId].taskState}
+                    autoFocus
+                  >
+                    <MenuItem value={'В очереди'} key={'В очереди'}>В очереди</MenuItem>
+                    <MenuItem value={'В работе'} key={'В работе'}> В работе</MenuItem>
+                    <MenuItem value={'Выполнено'} key={'Выполнено'}>Выполнено</MenuItem>
+                  </TextField>
+                  <TextField
+                    select
+                    margin="normal"
+                    fullWidth
+                    id="priority"
+                    label="Приоритет"
+                    name="priority"
+                    defaultValue={tasks[taskId].priority}
+                  >
+                    <MenuItem value={'1'} key={1}>Обычный</MenuItem>
+                    <MenuItem value={'2'} key={2}>Важно</MenuItem>
+                    <MenuItem value={'3'} key={3}>Срочно</MenuItem>
+                  </TextField>
+                  <Button
+                    type="submit"
+                    variant="contained"
+                    sx={{ mt: 3, mb: 2, float: 'right' }}
+                  >
+                    Сохранить
+                  </Button>
+                  <Button
+                    variant="contained"
+                    color="error"
+                    sx={{ mt: 3, mb: 2, float: 'right', mr: 2 }}
+                    onClick={() => {
+                      setOpenModalEdit(false)
+                      removeTask(tasks[taskId].id)
+                    }}
+                  >
+                    Удалить
+                  </Button>
+                </Box>
               </Box>
             </Box>
-          </Box>
-        </Container>
-      </Modal>
+          </Container>
+        </Modal>
+      )}
     </>
   )
 }
