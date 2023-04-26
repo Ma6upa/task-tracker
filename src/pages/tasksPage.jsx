@@ -20,6 +20,7 @@ import { useEffect, useState } from "react"
 import styles from '../styles/tasksPage.module.css';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import MenuIcon from '@mui/icons-material/Menu';
+import ImportExportIcon from '@mui/icons-material/ImportExport';
 import { useDispatch, useSelector } from "react-redux";
 import { Task } from "../components/task";
 
@@ -187,7 +188,9 @@ const TasksPage = () => {
             >
               <Card variant="outlined" className={styles.tasksWrapper}>
                 <Typography variant="h6" className={styles.tasksHeader}>
-                  В очереди
+                  В очереди <ImportExportIcon style={{ marginBottom: -10, float: 'right' }} onClick={() => {
+                    setTasksInQueue([...tasksInQueue].reverse())
+                  }} />
                 </Typography>
                 <Divider />
                 <Box className={styles.tasksItems}>
@@ -210,7 +213,9 @@ const TasksPage = () => {
               </Card>
               <Card variant="outlined" className={styles.tasksWrapper}>
                 <Typography variant="h6" className={styles.tasksHeader}>
-                  В работе
+                  В работе <ImportExportIcon style={{ marginBottom: -10, float: 'right' }} onClick={() => {
+                    setTasksInProgress([...tasksInProgress].reverse())
+                  }} />
                 </Typography>
                 <Divider />
                 <Box className={styles.tasksItems}>
@@ -233,7 +238,9 @@ const TasksPage = () => {
               </Card>
               <Card variant="outlined" className={styles.tasksWrapper}>
                 <Typography variant="h6" className={styles.tasksHeader}>
-                  Выполнено
+                  Выполнено <ImportExportIcon style={{ marginBottom: -10, float: 'right' }} onClick={() => {
+                    setTasksDone([...tasksDone].reverse())
+                  }} />
                 </Typography>
                 <Divider />
                 <Box className={styles.tasksItems}>
