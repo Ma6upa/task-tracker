@@ -64,7 +64,7 @@ const AuthForm = () => {
           }}
         >
           <Typography component="h1" variant="h5">
-            Sign in
+            Авторизация
           </Typography>
           <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
             <TextField
@@ -72,7 +72,7 @@ const AuthForm = () => {
               required
               fullWidth
               id="login"
-              label="Login"
+              label="Логин"
               name="login"
               autoFocus
             />
@@ -81,7 +81,7 @@ const AuthForm = () => {
               required
               fullWidth
               name="password"
-              label="Password"
+              label="Пароль"
               type="password"
               id="password"
             />
@@ -91,19 +91,19 @@ const AuthForm = () => {
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
             >
-              Sign In
+              Войти
             </Button>
             <Grid container>
               <Grid item>
                 <Link to={'/signUp'}>
-                  Don't have an account? Sign Up
+                  У вас еще нет аккаунта? Зарегистрируйтесь
                 </Link>
               </Grid>
             </Grid>
             {noUser && (
               <Box>
                 <Typography component="h2" variant="h6">
-                  This user doesn't exist, please <Link to={'/signUp'}>Sign up</Link>
+                  Такого пользователя не существует, пожалуйста <Link to={'/signUp'}>Зарегистрируйтесь</Link>
                 </Typography>
               </Box>
             )}
